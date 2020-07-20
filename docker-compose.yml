@@ -7,4 +7,12 @@ services:
       - ./django:/code
     ports:
       - "8000:8000"
-    command: python manage.py runserver 0.0.0.0:8000
+    command: uwsgi --socket :8000 --module sample_project.wsgi
+  nginx:
+    build: ./nginx
+    volumes:
+      - ./django/static:/static
+    ports:
+      - "80:80"
+    depends_on:
+      - web
